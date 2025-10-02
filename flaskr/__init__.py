@@ -24,8 +24,10 @@ def create_app(test_config=None):
         pass
 
     from . import db
+    from . import add
 
     db.init_app(app)
+    app.register_blueprint(add.bp)
 
     @app.route("/hello")
     def hello():
