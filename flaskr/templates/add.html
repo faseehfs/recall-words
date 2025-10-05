@@ -1,33 +1,36 @@
 {% extends 'base.html' %} {% block title %}Add{% endblock %} {% block content %}
-<div class="container pt-4">
-    <div class="row">
-        <h1>Add New Words</h1>
-        <div class="col-12 col-lg-6">
-            <p>Here you can add new words.</p>
+<div class="d-flex flex-column w-100 mx-auto p-3" style="max-width: 600px">
+    <h1 class="mx-auto w-100 text-center p-4">Add Words</h1>
+    <form id="wordForm">
+        <div class="mb-3">
+            <label for="word" class="form-label">Word</label>
+            <input class="form-control" id="word" required />
         </div>
-        <div class="clo-12 col-lg-6">
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label"
-                    >The word</label
-                >
-                <input
-                    type="email"
-                    class="form-control"
-                    id="exampleFormControlInput1"
-                    placeholder="name@example.com"
-                />
+        <div class="mb-3">
+            <label for="comments" class="form-label">Comments</label>
+            <textarea rows="3" class="form-control" id="comments"></textarea>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <button type="reset" class="btn btn-danger w-100">
+                    Discard
+                </button>
             </div>
-            <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label"
-                    >Comments</label
-                >
-                <textarea
-                    class="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                ></textarea>
+            <div class="col">
+                <button type="submit" class="btn btn-primary w-100">
+                    Submit
+                </button>
             </div>
         </div>
-    </div>
+        <div
+            id="successMessage"
+            class="text-success text-center"
+            style="display: none"
+        >
+            Word added successfully!
+        </div>
+    </form>
 </div>
+
+<script src="{{ url_for('static', filename='js/add.js') }}"></script>
 {% endblock %}
