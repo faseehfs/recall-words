@@ -4,11 +4,16 @@
     <form id="wordForm">
         <div class="mb-3">
             <label for="word" class="form-label">Word</label>
-            <input class="form-control" id="word" required />
+            <input name="word" id="word" class="form-control" required />
         </div>
         <div class="mb-3">
             <label for="comments" class="form-label">Comments</label>
-            <textarea rows="3" class="form-control" id="comments"></textarea>
+            <textarea
+                name="comments"
+                id="comments"
+                rows="3"
+                class="form-control"
+            ></textarea>
         </div>
         <div class="row mb-3">
             <div class="col">
@@ -17,7 +22,11 @@
                 </button>
             </div>
             <div class="col">
-                <button type="submit" class="btn btn-primary w-100">
+                <button
+                    id="submit-btn"
+                    type="submit"
+                    class="btn btn-primary w-100"
+                >
                     Submit
                 </button>
             </div>
@@ -32,5 +41,41 @@
     </form>
 </div>
 
-<script src="{{ url_for('static', filename='js/add.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("wordForm");
+        const successMessage = document.getElementById("successMessage");
+        const submitBtn = document.getElementById("submit-btn");
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch("{{ url_for('add.add') }}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        form.reset();
+                        successMessage.style.display = "block";
+                        setTimeout(() => {
+                            successMessage.style.display = "none";
+                        }, 3000);
+                    } else {
+                        alert("Failed to submit.");
+                    }
+                    submitBtn.disabled = false;
+                })
+                .catch(() => {
+                    alert("Network error.");
+                    submitBtn.disabled = false;
+                });
+        });
+    });
+</script>
 {% endblock %}
