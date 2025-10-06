@@ -67,7 +67,7 @@
                             successMessage.style.display = "none";
                         }, 3000);
                     } else {
-                        alert("Failed to submit.");
+                        response.text().then((text) => alert(text));
                     }
                     submitBtn.disabled = false;
                 })

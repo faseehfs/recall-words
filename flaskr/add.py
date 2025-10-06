@@ -9,4 +9,4 @@ def add():
         return render_template("add.html")
 
     print(request.data.decode())
-    return ""
+    return "Success"
