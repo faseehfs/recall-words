@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, url_for
 
 
 def create_app(test_config=None):
@@ -29,8 +29,8 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(add.bp)
 
-    @app.route("/hello")
-    def hello():
-        return "Hello, World!"
+    @app.route("/")
+    def home():
+        return f"<a href='{url_for('add.add')}'>Add</a>"
 
     return app
