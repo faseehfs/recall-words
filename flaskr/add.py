@@ -6,12 +6,18 @@ bp = Blueprint("add", __name__, url_prefix="/add")
 
 @bp.route("/", methods=("GET", "POST"))
 def add():
+    """
+    GET: Returns the add page.
+    POST: Accepts a FormData containing "word" and "comments" as the body.
+    """
     if request.method == "GET":
         return render_template("add.html")
 
-    json = request.get_json()
-    word = json.get("word").strip().lower()
-    comments = json.get("comments").strip()
+    word = request.form.get("word").strip().lower()
+    if word is None:
+        return "Word is empty.", 400
+
+    comments = request.form.get("comments", "").strip()
 
     db = get_db()
     cursor = db.cursor()
@@ -32,4 +38,4 @@ def add():
     except:
         return "Failed to add the word.", 400
 
-    return "Success"
+    return "Word added."

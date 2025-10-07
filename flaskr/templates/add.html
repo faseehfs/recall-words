@@ -52,12 +52,9 @@
             submitBtn.disabled = true;
 
             const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
             fetch("{{ url_for('add.add') }}", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
+                body: formData,
             })
                 .then((response) => {
                     if (response.ok) {
