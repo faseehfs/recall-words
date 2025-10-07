@@ -1,45 +1,26 @@
 {% extends 'base.html' %} {% block title %}Add{% endblock %} {% block content %}
-<div class="d-flex flex-column w-100 mx-auto p-3" style="max-width: 600px">
-    <h1 class="mx-auto w-100 text-center p-4">Add Words</h1>
-    <form id="wordForm">
-        <div class="mb-3">
-            <label for="word" class="form-label">Word</label>
-            <input name="word" id="word" class="form-control" required />
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Add Words</title>
+    </head>
+    <body>
+        <div>
+            <h1>Add Words</h1>
+            <form id="wordForm">
+                <label for="word">Word</label>
+                <input name="word" id="word" required />
+
+                <label for="comments">Comments</label>
+                <textarea name="comments" id="comments" rows="4"></textarea>
+
+                <button type="reset">Discard</button>
+                <button id="submit-btn" type="submit">Submit</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="comments" class="form-label">Comments</label>
-            <textarea
-                name="comments"
-                id="comments"
-                rows="3"
-                class="form-control"
-            ></textarea>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                <button type="reset" class="btn btn-danger w-100">
-                    Discard
-                </button>
-            </div>
-            <div class="col">
-                <button
-                    id="submit-btn"
-                    type="submit"
-                    class="btn btn-primary w-100"
-                >
-                    Submit
-                </button>
-            </div>
-        </div>
-        <div
-            id="successMessage"
-            class="text-success text-center"
-            style="display: none"
-        >
-            Word added successfully!
-        </div>
-    </form>
-</div>
+    </body>
+</html>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
