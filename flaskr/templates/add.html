@@ -9,14 +9,18 @@
         <div>
             <h1>Add Words</h1>
             <form id="wordForm">
-                <label for="word">Word</label>
+                <label for="word">Word:</label>
                 <input name="word" id="word" required />
 
-                <label for="comments">Comments</label>
+                <label for="comments">Comments:</label>
                 <textarea name="comments" id="comments" rows="4"></textarea>
 
-                <button type="reset">Discard</button>
-                <button id="submit-btn" type="submit">Submit</button>
+                <div style="display: flex; gap: 4px">
+                    <button type="reset">Discard</button>
+                    <button id="submit-btn" type="submit" style="width: 100%">
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
     </body>
