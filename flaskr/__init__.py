@@ -72,4 +72,12 @@ def create_app(test_config=None):
 
         return "Word added."
 
+    @app.route("/browse/", methods=("GET",))
+    def browse():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT word, comment FROM words;")
+        words_and_comments = cursor.fetchall()
+        return render_template("browse.html", rows=words_and_comments)
+
     return app

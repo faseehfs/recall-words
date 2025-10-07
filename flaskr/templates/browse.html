@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% block title %}Browse{% endblock %} {% block content
+%}
+<h1>Browse</h1>
+
+{% for row in rows %}
+<h2>{{ row[0] }}</h2>
+<p>{{ row[1] }}</p>
+{% endfor %} {% endblock %}
