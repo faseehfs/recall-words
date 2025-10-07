@@ -43,8 +43,8 @@ def create_app(test_config=None):
         if request.method == "GET":
             return render_template("add.html")
 
-        word = request.form.get("word").strip().lower()
-        if word is None:
+        word = request.form.get("word", "").strip().lower()
+        if not word:
             return "Word is empty.", 400
 
         comments = request.form.get("comments", "").strip()
