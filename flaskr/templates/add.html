@@ -52,7 +52,7 @@
             submitBtn.disabled = true;
 
             const formData = new FormData(form);
-            fetch("{{ url_for('add.add') }}", {
+            fetch("{{ url_for('add') }}", {
                 method: "POST",
                 body: formData,
             })
