@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, Blueprint, render_template, request, url_for
+from flask import Flask, Blueprint, render_template, request, url_for, jsonify
 from .db import get_db
 
 
@@ -79,5 +79,17 @@ def create_app(test_config=None):
         cursor.execute("SELECT word, comment FROM words;")
         words_and_comments = cursor.fetchall()
         return render_template("browse.html", rows=words_and_comments)
+
+    @app.route("/delete/<word>/", methods=("GET", "POST"))
+    def delete(word):
+        db = get_db()
+        cursor = db.cursor()
+        try:
+            cursor.execute("DELETE FROM words WHERE word = %s", (word,))
+            db.commit()
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 400
+        else:
+            return jsonify({"status": "success", "deleted": word})
 
     return app
