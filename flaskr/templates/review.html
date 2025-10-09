@@ -1,20 +1,19 @@
 {% extends 'base.html' %} {% block title %}Review{% endblock %} {% block content
 %}
-<div>
-    <h2 style="margin-bottom: 6px">{{ word }}</h2>
-    <button id="showBtn" style="width: 100%">Show Answer</button>
-    <div id="ease-btns" style="display: none; gap: 2px">
-        <button style="flex: 1">Again</button>
-        <button style="flex: 1">Hard</button>
-        <button style="flex: 1">Good</button>
-        <button style="flex: 1">Easy</button>
-    </div>
-    <hr />
+<h1>Review</h1>
+<h2 style="margin-bottom: 10px">{{ word }}</h2>
+<button id="showBtn" style="width: 100%">Show Answer</button>
+<div id="ease-btns" style="display: none; gap: 2px">
+    <button style="flex: 1">Again</button>
+    <button style="flex: 1">Hard</button>
+    <button style="flex: 1">Good</button>
+    <button style="flex: 1">Easy</button>
+</div>
+<hr style="margin: 12px 0 12px 0" />
 
-    <div id="ans" style="display: none">
-        <p><b>Comment: </b>{{ comment }}</p>
-        <ul id="definitions"></ul>
-    </div>
+<div id="ans" style="display: none">
+    <p><b>Comment: </b>{{ comment }}</p>
+    <ul id="definitions"></ul>
 </div>
 
 <script>
