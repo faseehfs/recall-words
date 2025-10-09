@@ -4,45 +4,45 @@
 <h2 style="margin-bottom: 10px">{{ word }}</h2>
 <button id="showBtn" style="width: 100%">Show Answer</button>
 <div id="ease-btns" style="display: none; gap: 2px">
-    <button style="flex: 1">Again</button>
-    <button style="flex: 1">Hard</button>
-    <button style="flex: 1">Good</button>
-    <button style="flex: 1">Easy</button>
+  <button style="flex: 1">Again</button>
+  <button style="flex: 1">Hard</button>
+  <button style="flex: 1">Good</button>
+  <button style="flex: 1">Easy</button>
 </div>
-<hr style="margin: 12px 0 12px 0" />
 
 <div id="ans" style="display: none">
-    <p><b>Comment: </b>{{ comment }}</p>
-    <ul id="definitions"></ul>
+  <hr style="margin: 12px 0 12px 0" />
+  <p><b>Comment: </b>{{ comment }}</p>
+  <ul id="definitions"></ul>
 </div>
 
 <script>
-    const ans = document.getElementById("ans");
-    const btn = document.getElementById("showBtn");
+  const ans = document.getElementById("ans");
+  const btn = document.getElementById("showBtn");
 
-    btn.addEventListener("click", () => {
-        ans.style.display = "block";
-        btn.style.display = "none";
-        document.getElementById("ease-btns").style.display = "flex";
+  btn.addEventListener("click", () => {
+    ans.style.display = "block";
+    btn.style.display = "none";
+    document.getElementById("ease-btns").style.display = "flex";
+  });
+
+  async function getDefinition() {
+    const word = "{{ word }}";
+    const definitionsList = document.getElementById("definitions");
+
+    response = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+    );
+    data = await response.json();
+    data[0].meanings.forEach((meaning) => {
+      meaning.definitions.forEach((def) => {
+        const li = document.createElement("li");
+        li.innerHTML = def.definition;
+        definitionsList.appendChild(li);
+      });
     });
+  }
 
-    async function getDefinition() {
-        const word = "{{ word }}";
-        const definitionsList = document.getElementById("definitions");
-
-        response = await fetch(
-            `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-        );
-        data = await response.json();
-        data[0].meanings.forEach((meaning) => {
-            meaning.definitions.forEach((def) => {
-                const li = document.createElement("li");
-                li.innerHTML = def.definition;
-                definitionsList.appendChild(li);
-            });
-        });
-    }
-
-    getDefinition();
+  getDefinition();
 </script>
 {% endblock %}
