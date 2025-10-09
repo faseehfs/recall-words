@@ -32,7 +32,7 @@ def create_app(test_config=None):
 
     @app.route("/")
     def home():
-        return f"<a href='{url_for('add')}'>Add</a>"
+        return render_template("home.html")
 
     @app.route("/add/", methods=("GET", "POST"))
     def add():
@@ -78,7 +78,7 @@ def create_app(test_config=None):
         cursor = db.cursor()
         cursor.execute("SELECT word, comment FROM words;")
         words_and_comments = cursor.fetchall()
-        return render_template("browse.html", rows=words_and_comments)
+        return render_template("browse.html", words_and_comments=words_and_comments)
 
     @app.route("/delete/<word>/", methods=("GET", "POST"))
     def delete(word):

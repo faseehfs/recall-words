@@ -2,9 +2,55 @@
 %}
 <h1>Browse</h1>
 
-{% for row in rows %}
-<div class="card">
-    <h2>{{ row[0] }}</h2>
-    <p>{{ row[1] if row[1] else "No comments." }}</p>
+{% for word, comment in words_and_comments %}
+<div class="card" onclick="toggleActions(this)">
+    <h2>{{ word }}</h2>
+    <div class="actions" style="display: none">
+        {% if comment %}
+        <p>{{ comment }}</p>
+        {% endif %}
+        <div style="display: flex; gap: 2px; margin-top: 4px">
+            <button
+                class="delete"
+                style="flex: 1"
+                data-url="{{ url_for('delete', word=word) }}"
+            >
+                Delete
+            </button>
+            <button class="edit" style="flex: 1">Edit Comment</button>
+        </div>
+    </div>
 </div>
-{% endfor %} {% endblock %}
+{% endfor %}
+
+<script>
+    function toggleActions(card) {
+        const actions = card.querySelector(".actions");
+        actions.style.display =
+            actions.style.display === "none" ? "block" : "none";
+    }
+
+    const deleteBtns = document.querySelectorAll(".delete");
+
+    deleteBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const url = btn.dataset.url;
+
+            fetch(url, { method: "POST" })
+                .then((response) => {
+                    if (response.ok) {
+                        const card = btn.closest(".card");
+                        card.remove();
+                    } else {
+                        alert("Error deleting word.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Error deleting word.");
+                });
+        });
+    });
+</script>
+
+{% endblock %}
