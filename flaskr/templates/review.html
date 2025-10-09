@@ -13,7 +13,7 @@
 
     <div id="ans" style="display: none">
         <p><b>Comment: </b>{{ comment }}</p>
-        <p id="definition"></p>
+        <ul id="definitions"></ul>
     </div>
 </div>
 
@@ -26,5 +26,24 @@
         btn.style.display = "none";
         document.getElementById("ease-btns").style.display = "flex";
     });
+
+    async function getDefinition() {
+        const word = "{{ word }}";
+        const definitionsList = document.getElementById("definitions");
+
+        response = await fetch(
+            `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+        );
+        data = await response.json();
+        data[0].meanings.forEach((meaning) => {
+            meaning.definitions.forEach((def) => {
+                const li = document.createElement("li");
+                li.innerHTML = def.definition;
+                definitionsList.appendChild(li);
+            });
+        });
+    }
+
+    getDefinition();
 </script>
 {% endblock %}
