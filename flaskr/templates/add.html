@@ -42,7 +42,6 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("wordForm");
-        const successMessage = document.getElementById("successMessage");
         const submitBtn = document.getElementById("submit-btn");
 
         form.addEventListener("submit", (event) => {
@@ -57,16 +56,13 @@
                 .then((response) => {
                     if (response.ok) {
                         form.reset();
-                        successMessage.style.display = "block";
-                        setTimeout(() => {
-                            successMessage.style.display = "none";
-                        }, 3000);
                     } else {
                         response.text().then((text) => alert(text));
                     }
                     submitBtn.disabled = false;
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.error("Fetch failed:", err);
                     alert("Network error.");
                     submitBtn.disabled = false;
                 });
