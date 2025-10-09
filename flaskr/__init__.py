@@ -57,7 +57,7 @@ def create_app(test_config=None):
             )
             exists = cursor.fetchone()[0]
             if exists:
-                return "Word already exists", 400
+                return jsonify({"message": "Word already exists."}), 400
 
             cursor.execute(
                 """
@@ -68,9 +68,9 @@ def create_app(test_config=None):
             )
             db.commit()
         except:
-            return "Failed to add the word.", 400
+            return jsonify({"message": f"Failed to add {word}."}), 400
 
-        return "Word added."
+        return jsonify({"message": f"Added {word}."}), 200
 
     @app.route("/browse/", methods=("GET",))
     def browse():
@@ -87,9 +87,12 @@ def create_app(test_config=None):
         try:
             cursor.execute("DELETE FROM words WHERE word = %s", (word,))
             db.commit()
-        except Exception as e:
-            return jsonify({"status": "error", "message": str(e)}), 400
+        except:
+            return (
+                jsonify({"message": f"Failed to delete {word}."}),
+                400,
+            )
         else:
-            return jsonify({"status": "success", "deleted": word})
+            return jsonify({"message": f"Deleted {word}."}), 200
 
     return app

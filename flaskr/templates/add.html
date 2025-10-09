@@ -41,31 +41,32 @@
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("wordForm");
+        const wordForm = document.getElementById("wordForm");
         const submitBtn = document.getElementById("submit-btn");
 
-        form.addEventListener("submit", (event) => {
+        wordForm.addEventListener("submit", async (event) => {
             event.preventDefault();
             submitBtn.disabled = true;
 
-            const formData = new FormData(form);
-            fetch("{{ url_for('add') }}", {
-                method: "POST",
-                body: formData,
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        form.reset();
-                    } else {
-                        response.text().then((text) => alert(text));
-                    }
-                    submitBtn.disabled = false;
-                })
-                .catch((err) => {
-                    console.error("Fetch failed:", err);
-                    alert("Network error.");
-                    submitBtn.disabled = false;
+            try {
+                const formData = new FormData(wordForm);
+                const response = await fetch("{{ url_for('add') }}", {
+                    method: "POST",
+                    body: formData,
                 });
+                const data = await response.json();
+
+                if (response.ok) {
+                    wordForm.reset();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Network error.");
+            } finally {
+                submitBtn.disabled = false;
+            }
         });
     });
 </script>
