@@ -72,6 +72,24 @@ def create_app(test_config=None):
 
         return jsonify({"message": f"Added {word}."}), 200
 
+    @app.route("/review/", methods=("GET",))
+    def review():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute(
+            """
+            SELECT * 
+            FROM words 
+            WHERE next_review_date < CURRENT_TIMESTAMP 
+            ORDER BY next_review_date ASC 
+            LIMIT 1;
+            """
+        )
+        row = cursor.fetchone()
+        if row is None:
+            return jsonify({"word": None, "comment": None}), 200
+        return render_template("review.html", word=row[0], comment=row[1]), 200
+
     @app.route("/browse/", methods=("GET",))
     def browse():
         db = get_db()
