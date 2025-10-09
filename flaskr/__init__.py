@@ -45,7 +45,7 @@ def create_app(test_config=None):
 
         word = request.form.get("word", "").strip().lower()
         if not word:
-            return "Word is empty.", 400
+            return jsonify({"message": "Word is empty."}), 400
 
         comments = request.form.get("comments", "").strip()
 
