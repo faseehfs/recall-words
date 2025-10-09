@@ -13,12 +13,18 @@
                 <input name="word" id="word" required />
 
                 <label for="comments">Comments:</label>
-                <textarea name="comments" id="comments" rows="4"></textarea>
+                <textarea
+                    name="comments"
+                    id="comments"
+                    rows="3"
+                    class="auto-resize"
+                    style="overflow: hidden; resize: none"
+                ></textarea>
 
                 <div style="display: flex; gap: 4px">
                     <button type="reset">Discard</button>
                     <button id="submit-btn" type="submit" style="width: 100%">
-                        Submit
+                        Add
                     </button>
                 </div>
             </form>
@@ -27,6 +33,13 @@
 </html>
 
 <script>
+    document.querySelectorAll("textarea.auto-resize").forEach((textarea) => {
+        textarea.addEventListener("input", function () {
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
+        });
+    });
+
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("wordForm");
         const successMessage = document.getElementById("successMessage");
