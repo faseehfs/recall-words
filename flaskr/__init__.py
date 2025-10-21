@@ -3,6 +3,8 @@ import os
 from flask import Flask, Blueprint, render_template, request, url_for, jsonify
 from .db import get_db
 
+from .review import *
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -74,18 +76,7 @@ def create_app(test_config=None):
 
     @app.route("/review/", methods=("GET",))
     def review():
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute(
-            """
-            SELECT * 
-            FROM words 
-            WHERE next_review_date < CURRENT_TIMESTAMP 
-            ORDER BY next_review_date ASC 
-            LIMIT 1;
-            """
-        )
-        row = cursor.fetchone()
+        row = get_review_word_row()
         if row is None:
             return jsonify({"word": None, "comment": None}), 200
         interval_days = row[4]
