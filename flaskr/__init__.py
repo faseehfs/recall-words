@@ -88,7 +88,17 @@ def create_app(test_config=None):
         row = cursor.fetchone()
         if row is None:
             return jsonify({"word": None, "comment": None}), 200
-        return render_template("review.html", word=row[0], comment=row[1]), 200
+        interval_days = row[4]
+        all_interval_days = (1, interval_days, interval_days * 2, interval_days * 4)
+        return (
+            render_template(
+                "review.html",
+                word=row[0],
+                comment=row[1],
+                all_interval_days=all_interval_days,
+            ),
+            200,
+        )
 
     @app.route("/browse/", methods=("GET",))
     def browse():

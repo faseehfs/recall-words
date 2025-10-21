@@ -4,10 +4,18 @@
 <h2 style="margin-bottom: 10px">{{ word }}</h2>
 <button id="showBtn" style="width: 100%">Show Answer</button>
 <div id="ease-btns" style="display: none; gap: 2px">
-  <button style="flex: 1">Again</button>
-  <button style="flex: 1">Hard</button>
-  <button style="flex: 1">Good</button>
-  <button style="flex: 1">Easy</button>
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+    Again ({{ all_interval_days[0] }}d)
+  </button>
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+    Hard ({{ all_interval_days[1] }}d)
+  </button>
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+    Good ({{ all_interval_days[2] }}d)
+  </button>
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+    Easy ({{ all_interval_days[3] }}d)
+  </button>
 </div>
 
 <div id="ans" style="display: none">
