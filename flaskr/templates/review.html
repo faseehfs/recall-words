@@ -7,13 +7,13 @@
   <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
     Again ({{ all_interval_days[0] }}d)
   </button>
-  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[1] }}">
     Hard ({{ all_interval_days[1] }}d)
   </button>
-  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[2] }}">
     Good ({{ all_interval_days[2] }}d)
   </button>
-  <button style="flex: 1" data-interval-days="{{ all_interval_days[0] }}">
+  <button style="flex: 1" data-interval-days="{{ all_interval_days[3] }}">
     Easy ({{ all_interval_days[3] }}d)
   </button>
 </div>
@@ -27,6 +27,7 @@
 <script>
   const ans = document.getElementById("ans");
   const btn = document.getElementById("showBtn");
+  const word = "{{ word }}";
 
   btn.addEventListener("click", () => {
     ans.style.display = "block";
@@ -35,13 +36,12 @@
   });
 
   async function getDefinition() {
-    const word = "{{ word }}";
     const definitionsList = document.getElementById("definitions");
 
-    response = await fetch(
+    const response = await fetch(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
-    data = await response.json();
+    const data = await response.json();
     data[0].meanings.forEach((meaning) => {
       meaning.definitions.forEach((def) => {
         const li = document.createElement("li");
@@ -52,5 +52,26 @@
   }
 
   getDefinition();
+
+  const easeBtns = Array.from(document.getElementById("ease-btns").children);
+
+  easeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      fetch('{{ url_for("update_review_date") }}', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          word: word,
+          "interval-days": btn.dataset.intervalDays,
+        }),
+      }).then((response) => {
+        if (!response.ok) {
+          alert("Error updating review date");
+        } else {
+          window.location.reload();
+        }
+      });
+    });
+  });
 </script>
 {% endblock %}

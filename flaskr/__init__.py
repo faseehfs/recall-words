@@ -78,7 +78,7 @@ def create_app(test_config=None):
     def review():
         row = get_review_word_row()
         if row is None:
-            return jsonify({"word": None, "comment": None}), 200
+            return render_template("congrats.html")
         interval_days = row[4]
         all_interval_days = (1, interval_days, interval_days * 2, interval_days * 4)
         return (
@@ -90,6 +90,25 @@ def create_app(test_config=None):
             ),
             200,
         )
+
+    @app.route("/update-review-date/", methods=("POST",))
+    def update_review_date():
+        data = request.get_json()
+        word = data.get("word")
+        interval_days = int(data.get("interval-days"))
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute(
+            """
+            UPDATE words
+            SET interval_days = %s,
+                next_review_date = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL %s DAY)
+            WHERE word = %s;
+            """,
+            (interval_days, interval_days, word),
+        )
+        db.commit()
+        return jsonify({"message": "Review updated successfully"}), 200
 
     @app.route("/browse/", methods=("GET",))
     def browse():
