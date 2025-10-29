@@ -3,8 +3,6 @@ import os
 from flask import Flask, Blueprint, render_template, request, url_for, jsonify
 from . import db
 
-from .review import *
-
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -60,7 +58,7 @@ def create_app(test_config=None):
 
     @app.route("/review/", methods=("GET",))
     def review():
-        row = get_review_word_row()
+        row = db.get_review_word_row()
         if row is None:
             return render_template("congrats.html")
         interval_days = row[4]
