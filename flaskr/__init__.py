@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, Blueprint, render_template, request, url_for, jsonify
-from .db import get_db
+from . import db
 
 from .review import *
 
@@ -46,31 +46,15 @@ def create_app(test_config=None):
             return render_template("add.html")
 
         word = request.form.get("word", "").strip().lower()
+        comment = request.form.get("comments", "").strip()
+
         if not word:
             return jsonify({"message": "Word is empty."}), 400
 
-        comments = request.form.get("comments", "").strip()
+        if db.word_exists(word):
+            return jsonify({"message": "Word already exists."}), 400
 
-        db = get_db()
-        cursor = db.cursor()
-        try:
-            cursor.execute(
-                "SELECT EXISTS(SELECT 1 FROM words WHERE word = %s)", (word,)
-            )
-            exists = cursor.fetchone()[0]
-            if exists:
-                return jsonify({"message": "Word already exists."}), 400
-
-            cursor.execute(
-                """
-                INSERT INTO words (word, comment, interval_days)
-                VALUES (%s, %s, %s)
-                """,
-                (word, comments, 1),  # interval_days starts at 1
-            )
-            db.commit()
-        except:
-            return jsonify({"message": f"Failed to add {word}."}), 400
+        db.add_word(word, comment)
 
         return jsonify({"message": f"Added {word}."}), 200
 
@@ -96,41 +80,18 @@ def create_app(test_config=None):
         data = request.get_json()
         word = data.get("word")
         interval_days = int(data.get("interval-days"))
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute(
-            """
-            UPDATE words
-            SET interval_days = %s,
-                next_review_date = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL %s DAY)
-            WHERE word = %s;
-            """,
-            (interval_days, interval_days, word),
-        )
-        db.commit()
+        db.update_review_date(word, interval_days)
+
         return jsonify({"message": "Review updated successfully"}), 200
 
     @app.route("/browse/", methods=("GET",))
     def browse():
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute("SELECT word, comment FROM words;")
-        words_and_comments = cursor.fetchall()
+        words_and_comments = db.get_words_and_comments()
         return render_template("browse.html", words_and_comments=words_and_comments)
 
     @app.route("/delete/<word>/", methods=("GET", "POST"))
     def delete(word):
-        db = get_db()
-        cursor = db.cursor()
-        try:
-            cursor.execute("DELETE FROM words WHERE word = %s", (word,))
-            db.commit()
-        except:
-            return (
-                jsonify({"message": f"Failed to delete {word}."}),
-                400,
-            )
-        else:
-            return jsonify({"message": f"Deleted {word}."}), 200
+        db.delete_word(word)
+        return jsonify({"message": f"Deleted {word}."}), 200
 
     return app
