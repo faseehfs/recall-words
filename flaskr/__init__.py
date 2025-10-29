@@ -87,8 +87,9 @@ def create_app(test_config=None):
         words = db.get_all_words()
         return render_template("browse.html", words=words)
 
-    @app.route("/delete/<word>/", methods=("GET", "POST"))
-    def delete(word):
+    @app.route("/delete/", methods=("POST",))
+    def delete():
+        word = request.get_json().get("word")
         db.delete_word(word)
         return jsonify({"message": f"Deleted {word}."}), 200
 

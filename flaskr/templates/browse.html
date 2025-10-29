@@ -4,7 +4,7 @@
 
 {% for word in words %}
 <div class="card" onclick="toggleActions(this)">
-    <h2>{{ word[0] }}</h2>
+    <h2>{{ loop.index }}. {{ word[0] }}</h2>
     <div class="actions" style="display: none">
         <ul>
             <li><b>Comment:</b> {{ word[1] }}</li>
@@ -14,11 +14,7 @@
         </ul>
 
         <div style="display: flex; gap: 2px; margin-top: 4px">
-            <button
-                class="delete"
-                style="flex: 1"
-                data-url="{{ url_for('delete', word=word) }}"
-            >
+            <button class="delete" style="flex: 1" data-word="{{ word[0] }}">
                 Delete
             </button>
             <button class="edit" style="flex: 1">Edit Comment</button>
@@ -35,13 +31,20 @@
     }
 
     const deleteBtns = document.querySelectorAll(".delete");
+    const deleteUrl = "{{ url_for('delete') }}";
 
     deleteBtns.forEach((btn) => {
         btn.addEventListener("click", async () => {
-            const url = btn.dataset.url;
+            const word = btn.dataset.word;
 
             try {
-                const response = await fetch(url, { method: "POST" });
+                const response = await fetch(deleteUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ word: word }),
+                });
                 const data = await response.json();
 
                 if (response.ok) {
@@ -50,7 +53,7 @@
                     alert(data.message);
                 }
             } catch (err) {
-                console.error("Network error:", err);
+                console.error(err);
                 alert("Error deleting word.");
             }
         });
