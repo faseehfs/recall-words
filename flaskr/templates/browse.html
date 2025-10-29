@@ -2,13 +2,17 @@
 %}
 <h1>Browse Words</h1>
 
-{% for word, comment in words_and_comments %}
+{% for word in words %}
 <div class="card" onclick="toggleActions(this)">
-    <h2>{{ word }}</h2>
+    <h2>{{ word[0] }}</h2>
     <div class="actions" style="display: none">
-        {% if comment %}
-        <p>{{ comment }}</p>
-        {% endif %}
+        <ul>
+            <li><b>Comment:</b> {{ word[1] }}</li>
+            <li><b>Created at:</b> {{ word[2] }}</li>
+            <li><b>Next review date:</b> {{ word[3] }}</li>
+            <li><b>Interval days:</b> {{ word[4] }}</li>
+        </ul>
+
         <div style="display: flex; gap: 2px; margin-top: 4px">
             <button
                 class="delete"

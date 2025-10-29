@@ -84,12 +84,11 @@ def update_review_date(word, interval_days):
     db.commit()
 
 
-def get_words_and_comments():
+def get_all_words():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT word, comment FROM words;")
-    words_and_comments = cursor.fetchall()
-    return words_and_comments
+    cursor.execute("SELECT * FROM words ORDER BY word;")
+    return cursor.fetchall()
 
 
 def delete_word(word):

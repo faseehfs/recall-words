@@ -84,8 +84,8 @@ def create_app(test_config=None):
 
     @app.route("/browse/", methods=("GET",))
     def browse():
-        words_and_comments = db.get_words_and_comments()
-        return render_template("browse.html", words_and_comments=words_and_comments)
+        words = db.get_all_words()
+        return render_template("browse.html", words=words)
 
     @app.route("/delete/<word>/", methods=("GET", "POST"))
     def delete(word):
